@@ -1,14 +1,13 @@
 ## Activer le port série du Raspberry :
 
 1. Ouvrez un terminal sur votre Raspberry Pi
-sudo raspi-config
+   sudo raspi-config
 
-2. Une fois raspi-config lancé, choisissez Interfacing options, puis Serial : 
+2. Une fois raspi-config lancé, choisissez Interfacing options, puis Serial :
 
-    1. Répondez No à la partie demandant si vous souhaitez activer un shell via la connexion série, 
-    2. Répondez Yes à la partie demandant si vous souhaitez activer le port hardware. 
-    3. Validez, faites Finish, puis dites oui à la question vous demandant si vous souhaitez rebooter le Raspberry Pi.
-
+   1. Répondez No à la partie demandant si vous souhaitez activer un shell via la connexion série,
+   2. Répondez Yes à la partie demandant si vous souhaitez activer le port hardware.
+   3. Validez, faites Finish, puis dites oui à la question vous demandant si vous souhaitez rebooter le Raspberry Pi.
 
 ## Désactiver le bluetooth :
 
@@ -19,26 +18,24 @@ sudo raspi-config
 ## Vérifier que le port série du Raspberry a bien été activé :
 
 1. Installer Minicom avec les commandes ci-dessous.
-    1. sudo apt update -y
-    2. sudo apt install minicom -y
+   1. sudo apt update -y
+   2. sudo apt install minicom -y
 
-
-## Démarrer Minicom en lui indiquant le port série à utiliser.  
+## Démarrer Minicom en lui indiquant le port série à utiliser.
 
 1. sudo minicom -b 115000 -o -D /dev/serial0
-sudo minicom -D /dev/serial0
-
+   sudo minicom -D /dev/serial0
 
 ## Vérifier la connexion entre le Raspberry et le SIM808 :
+
 Commande = AT
 La reponse doit etre : OK
-
 
 ## Vérifier si la carte SIM est bien présente et utilisable :
 
 Commande = AT+CPIN=1234
 
-Les réponses doivent être : 
+Les réponses doivent être :
 
 OK
 
@@ -48,12 +45,11 @@ Call Ready
 
 SMS Ready
 
-
-## Passer en mode texte pour les SMS : 
+## Passer en mode texte pour les SMS :
 
 Commande = AT+CMGF=1
 
-La réponses doit être : 
+La réponses doit être :
 
 OK
 
@@ -71,3 +67,8 @@ Puis entrer le message : TEST DES SMS
 
     OK
 
+var Cities = {City1:"Tokyo",City2:"Paris",City3:"Dubai",City3:"Rome",City4:"London"}
+for(var city in Cities)
+{
+console.log(city,":",Cities[city]);
+}

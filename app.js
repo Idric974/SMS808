@@ -1,37 +1,82 @@
-const { SerialPort } = require('serialport')
-const Readline = require('@serialport/parser-readline')
-const port = new SerialPort({
-  path: '/dev/serial0',
-  baudRate: 115000,
-})
+const express = require('express');
+const app = express();
+const bodyParser = require('body-parser');
 
-// Ecriture d'un message.
+// Gestion
+const postSmsRoutes = require('./routes/postSmsRoute');
+const getSmsRoutes = require('./routes/getSmsRoute');
 
-port.write('Test avec node js, dit-moi si tu reçoit ', function(err) {
+//! Utilisation de cors pour les connexions
 
-  if (err) {
-    return console.log('Error on write: ', err.message)
-  }
-  console.log('message written')
-})
+const cors = require('cors');
+app.use(cors());
 
-// Open errors will be emitted as an error event
-port.on('error', function(err) {
-  console.log('Error: ', err.message)
-})
+//! --------------------------------------------------
 
+//! Header pour les Cross Origine
 
-// Lecture d'un message.
+app.use((req, res, next) => {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader(
+    'Access-Control-Allow-Headers',
+    'Origin, X-Requested-With, Content, Accept, Content-Type, Authorization'
+  );
+  res.setHeader(
+    'Access-Control-Allow-Methods',
+    'GET, POST, PUT, DELETE, PATCH, OPTIONS'
+  );
+  next();
+});
 
-// Read data that is available but keep the stream in "paused mode"
-port.on('readable', function () {
-    console.log('Data:', port.read())
-  })
-  
-  // Switches the port into "flowing mode"
-//   port.on('data', function (data) {
-//     console.log('Data:', data)
-//   })
-  
-  // Pipe the data into another stream (like a parser or standard out)
-  // const lineStream = port.pipe(new Readline())
+//! --------------------------------------------------
+
+//! Utilisation de body parser
+
+app.use(bodyParser.json());
+
+//! --------------------------------------------------
+
+//! Génération des pages html.
+
+app.get('/', (req, res) => {
+  res.sendFile(__dirname + '/index.html');
+});
+
+app.get('/pageRelay.html', (req, res) => {
+  res.sendFile(__dirname + '/pageRelay.html');
+});
+
+app.get('/pageCourbes.html', (req, res) => {
+  res.sendFile(__dirname + '/pageCourbes.html');
+});
+
+app.get('/pageCourbes1.html', (req, res) => {
+  res.sendFile(__dirname + '/pageCourbes1.html');
+});
+
+//! --------------------------------------------------
+
+//! Les images.
+
+app.use('/images', express.static('/home/pi/Desktop/champiBack_V2/images'));
+//! --------------------------------------------------
+
+//! Le CSS.
+
+app.use('/styles', express.static('/home/pi/Desktop/champiBack_V2/styles'));
+//! --------------------------------------------------
+
+//! Le Javascript.
+
+app.use('/', express.static('/home/pi/Desktop/champiBack_V2/'));
+//! --------------------------------------------------
+
+//! Liste des routes.
+
+// Gestion
+app.use('/api/postSms', postSmsRoutes);
+app.use('/api/getSms', getSmsRoutes);
+
+//! --------------------------------------------------
+
+module.exports = app;
