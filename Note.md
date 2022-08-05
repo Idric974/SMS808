@@ -72,3 +72,6 @@ for(var city in Cities)
 {
 console.log(city,":",Cities[city]);
 }
+
+
+ssh-keygen -R 192.168.1.
