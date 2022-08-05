@@ -75,3 +75,6 @@ console.log(city,":",Cities[city]);
 
 
 ssh-keygen -R 192.168.1.
+npm i @serialport/bindings
+npm i node-pdu
+npm i serialport

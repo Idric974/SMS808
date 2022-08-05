@@ -4,14 +4,15 @@
   "description": "Projet SMS808",
   "main": "server.js",
   "dependencies": {
+    "@serialport/bindings": "^9.2.9",
     "axios": "^0.27.2",
     "cors": "^2.8.5",
     "express": "^4.18.1",
+    "node-pdu": "^1.0.15",
     "nodemon": "^2.0.19",
     "serialport": "^10.4.0",
     "serialport-gsm": "^3.4.2"
   },
-  "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },

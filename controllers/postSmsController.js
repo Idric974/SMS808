@@ -1,11 +1,8 @@
-let { phone } = require('../config/config')
-let serialportgsm = require('serialport-gsm');
-var gsmModem = serialportgsm.Modem();
+let { phone, gsmModem } = require('../config/config')
 
 // serialportgsm.list((err, result) => {
 //    console.log('Les des ports disponibles ===> ', result);
 // });
-
 
 //! SEND SMS.
 

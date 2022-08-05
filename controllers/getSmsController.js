@@ -1,4 +1,4 @@
-let { gsmModem, options, serialportgsm } = require('../config/config')
+let { gsmModem, serialportgsm } = require('../config/config')
 
 exports.getSms = (req, res) => {
 
