@@ -2,7 +2,7 @@ const express = require('express');
 const axios = require('axios');
 const app = express();
 const bodyParser = require('body-parser');
-const { options, gsmModem } = require('./config/config')
+const { options, gsmModem } = require('./config/config');
 
 //! GESTION DU MODEM.
 
@@ -30,45 +30,120 @@ gsmModem.on('open', () => {
 
 //? -------------------------------------------------
 
-
 //? Reception des SMS.
 
+let instruction;
 
-gsmModem.on('onNewMessage', data => {
+gsmModem.on('onNewMessage', (data) => {
   //
-  console.log("=====> [ INFO SMS RECU ] Numéro de téléphone : ", data['sender']);
-  console.log("=====> [ INFO SMS RECU ] Corps du message : ", data['message']);
-  console.log("=====> [ INFO SMS RECU ] Index du message : ", data['index']);
-  console.log("=====> [ INFO SMS RECU ] msgStatus du message : ", data['msgStatus']);
-  console.log("=====> [ INFO SMS RECU ] dateTimeSent du message : ", data['dateTimeSent']);
 
+  instruction = data['message'];
+  console.log('instruction ===> ', instruction.split(':')[1]);
 
-  //* Requete de retour SMS.
+  // console.log(
+  //   '=====> [ INFO SMS RECU ] Numéro de téléphone : ',
+  //   data['sender']
+  // );
 
-  const url = 'http://192.168.1.10:3003/api/postSmsOrderRoute/postSmsOrder';
+  // console.log('=====> [ INFO SMS RECU ] Corps du message : ', data['message']);
 
-  let message = "TEST SMS ORDER";
+  // console.log('=====> [ INFO SMS RECU ] Index du message : ', data['index']);
 
-  axios
-    .post(url, {
-      message,
-    })
-    .then(function (response) {
-      console.log('SMS ORDERS : ', response.data);
-    })
-    .catch(function (error) {
-      console.log(error);
+  // console.log(
+  //  '=====> [ INFO SMS RECU ] msgStatus du message : ',
+  //  data['msgStatus']
+  // );
+
+  // console.log(
+  //   '=====> [ INFO SMS RECU ] dateTimeSent du message : ',
+  //data['dateTimeSent']
+  //);
+
+  //! Les promesses.
+
+  //? Récupération du numéro de la salle.
+
+  let numSalle;
+
+  let getNumSalle = () => {
+    return new Promise((resolve, reject) => {
+      //
+      if (instruction.split(':')[1] == 1) {
+        numSalle = 1;
+        console.log('numSalle :', numSalle);
+        resolve();
+        //
+      } else if (instruction.split(':')[1] == 2) {
+        numSalle = 2;
+        console.log('numSalle :', numSalle);
+        resolve();
+      } else if (instruction.split(':')[1] == 3) {
+        numSalle = 3;
+        console.log('numSalle :', numSalle);
+        resolve();
+      } else if (instruction.split(':')[1] == 4) {
+        numSalle = 4;
+        console.log('numSalle :', numSalle);
+        resolve();
+      } else if (instruction.split(':')[1] == 5) {
+        numSalle = 6;
+        console.log('numSalle :', numSalle);
+        resolve();
+      } else if (instruction.split(':')[1] == 6) {
+        numSalle = 6;
+        console.log('numSalle :', numSalle);
+        resolve();
+      } else {
+        console.log('EEREUR : getNumSalle');
+        reject();
+      }
     });
+  };
 
+  //? -------------------------------------------------
+
+  //? Envoyer l’instruction vers la salle concernée.
+
+  let sendInstruction = () => {
+    return new Promise((resolve, reject) => {
+      const url = `http://192.168.1.${numSalle}:3003/api/postSmsOrderRoute/postSmsOrder`;
+
+      let message = `INSTRUCTION POUR LA SALLE : ${numSalle}`;
+
+      axios
+        .post(url, {
+          message,
+        })
+        .then(function (response) {
+          console.log(`INSTRUCTION POUR LA SALLE : ${numSalle}`, response.data);
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+    });
+  };
+
+  //? -------------------------------------------------
+
+  //! Exécution des promesses.
+
+  let handleMyPromise = async () => {
+    try {
+      await getNumSalle();
+      await sendInstruction();
+    } catch (err) {
+      console.log('ERREUR : Exécution des promesses', err);
+    }
+  };
+
+  handleMyPromise();
+
+  //! -------------------------------------------------
 });
-
-//* -------------------------------------------------
-
-//? -------------------------------------------------
 
 //? onSendingMessage.
 
-gsmModem.on('onSendingMessage', data => {
+gsmModem.on('onSendingMessage', (data) => {
   //whole message data
   console.log(`Message d'envoi d'événement : ` + JSON.stringify(data));
 });
@@ -77,7 +152,7 @@ gsmModem.on('onSendingMessage', data => {
 
 //? Si mémoire pleine.
 
-gsmModem.on('onMemoryFull', data => {
+gsmModem.on('onMemoryFull', (data) => {
   //whole message data
   console.log(`Event Memory Full: ` + JSON.stringify(data));
 });
@@ -86,7 +161,7 @@ gsmModem.on('onMemoryFull', data => {
 
 //? Ouverture du port modem.
 
-gsmModem.open('/dev/ttyAMA0', options);
+gsmModem.open('/dev/serial0', options);
 
 //? -------------------------------------------------
 
@@ -100,7 +175,6 @@ const postSmsRoutes = require('./routes/postSmsRoute');
 const getSmsRoutes = require('./routes/getSmsRoute');
 
 //? --------------------------------------------------
-
 
 //? Utilisation de cors pour les connexions
 

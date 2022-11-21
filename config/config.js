@@ -23,11 +23,10 @@ let options = {
 
 let phone = {
   name: 'Idric',
-  number: '+2620692357283',
-  numberSelf: '+2620692044835',
+  //number: '+2620692357283', //* Numéro du destinataire du message du message (Pascale).
+  number: '+2620693336783', //* Numéro du destinataire du message du message (Antoine).
+  numberSelf: '+2620692044835', //* Numéro de la carte SIM dans le module SMS808.
   mode: 'PDU',
 };
 
-
-
-module.exports = {options, phone, gsmModem, serialportgsm}
+module.exports = { options, phone, gsmModem, serialportgsm };

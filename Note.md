@@ -61,20 +61,14 @@ Commande = AT+CMGS="+2620693336783"
 
 Puis entrer le message : TEST DES SMS
 
+Pour envoyer le message, appuier sur : CTRL Z
+
     La réponses doit être :
 
     +CMGS: + (un chiffre entre 0 et 255 EX: 33)
 
     OK
 
-var Cities = {City1:"Tokyo",City2:"Paris",City3:"Dubai",City3:"Rome",City4:"London"}
-for(var city in Cities)
-{
-console.log(city,":",Cities[city]);
-}
-
-
-ssh-keygen -R 192.168.1.
 npm i @serialport/bindings
 npm i node-pdu
 npm i serialport
