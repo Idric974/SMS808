@@ -33,12 +33,15 @@ gsmModem.on('open', () => {
 //? Reception des SMS.
 
 let instruction;
+let instructionConsigne;
 
 gsmModem.on('onNewMessage', (data) => {
   //
 
   instruction = data['message'];
-  console.log('instruction ===> ', instruction.split(':')[1]);
+  console.log('INSTRUCTION ====================> ', instruction);
+
+  //console.log('instruction ===> ', instruction.split(':')[1]);
 
   // console.log(
   //   '=====> [ INFO SMS RECU ] Numéro de téléphone : ',
@@ -59,7 +62,7 @@ gsmModem.on('onNewMessage', (data) => {
   //data['dateTimeSent']
   //);
 
-  //! Les promesses.
+  //! ⭐⭐⭐ RÉCUPÉRATION DES DATAS ⭐⭐⭐
 
   //? Récupération du numéro de la salle.
 
@@ -94,7 +97,7 @@ gsmModem.on('onNewMessage', (data) => {
         console.log('numSalle :', numSalle);
         resolve();
       } else {
-        console.log('EEREUR : getNumSalle');
+        console.log('ERREUR : getNumSalle');
         reject();
       }
     });
@@ -128,7 +131,7 @@ gsmModem.on('onNewMessage', (data) => {
 
   //! Exécution des promesses.
 
-  let handleMyPromise = async () => {
+  let recuperationDesDatas = async () => {
     try {
       await getNumSalle();
       await sendInstruction();
@@ -137,7 +140,120 @@ gsmModem.on('onNewMessage', (data) => {
     }
   };
 
-  handleMyPromise();
+  //! ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖
+
+  //! ⭐⭐⭐ MODIFICATION DE LA CONSIGNE ⭐⭐⭐.
+
+  //? Récupération du numéro de la salle.
+
+  let numSalleConsigne;
+
+  let getNumSalleConsigne = () => {
+    return new Promise((resolve, reject) => {
+      if (instructionConsigne == 1) {
+        numSalleConsigne = 1;
+        console.log('numSalle ====================> :', numSalleConsigne);
+        resolve();
+      } else if (instructionConsigne == 2) {
+        numSalleConsigne = 2;
+        console.log('numSalle ====================> :', numSalleConsigne);
+        resolve();
+      } else if (instructionConsigne == 3) {
+        numSalleConsigne = 3;
+        console.log('numSalle ====================> :', numSalleConsigne);
+        resolve();
+      } else if (instructionConsigne == 4) {
+        numSalleConsigne = 4;
+        console.log('numSalle ====================> :', numSalleConsigne);
+        resolve();
+      } else if (instructionConsigne == 5) {
+        numSalleConsigne = 6;
+        console.log('numSalle ====================> :', numSalleConsigne);
+        resolve();
+      } else if (instructionConsigne == 6) {
+        numSalleConsigne = 6;
+        console.log('numSalle ====================> :', numSalleConsigne);
+        resolve();
+      } else {
+        console.log('ERREUR : Get Num Salle');
+        reject();
+      }
+    });
+  };
+
+  //? -------------------------------------------------
+
+  //? Récupération de la consigne.
+
+  let consigne;
+
+  let getConsigne = () => {
+    return new Promise((resolve, reject) => {
+      try {
+        consigne = instruction.split('|')[1];
+        console.log('New consigne ====================> ', consigne);
+
+        resolve();
+      } catch (error) {
+        console.log('ERREUR : Get consigne', err);
+        reject;
+      }
+    });
+  };
+
+  //? -------------------------------------------------
+
+  //? Envoyer la modification de consigne vers la salle concernée.
+
+  let sendNewConsigne = () => {
+    return new Promise((resolve, reject) => {
+      const url = `http://192.168.1.${numSalleConsigne}:3003/api/postSmsOrderRoute/newConsigne`; //* Idric
+      //const url = `http://192.168.1.${numSalle}:3003/api/postSmsOrderRoute/postSmsOrder`; //*Antoine
+
+      axios
+        .post(url, {
+          numSalleConsigne,
+          consigne,
+        })
+        .then(function (response) {
+          console.log(`INSTRUCTION POUR LA SALLE : ${numSalle}`, response.data);
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+    });
+  };
+
+  //? -------------------------------------------------
+
+  //! -------------------------------------------------
+
+  //! Exécution des promesses.
+
+  let modificationConsigne = async () => {
+    try {
+      await getNumSalleConsigne();
+      await getConsigne();
+      await sendNewConsigne();
+    } catch (err) {
+      console.log('ERREUR : Exécution des promesses', err);
+    }
+  };
+
+  //! -------------------------------------------------
+
+  //! ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖
+
+  //! Routage de la demande.
+
+  if (instruction.split(':')[0] === 'Statut') {
+    console.log('instruction Statut ====================> ', instruction);
+    recuperationDesDatas();
+  } else if (instruction.split(':')[0] === 'Consigne') {
+    instructionConsigne = instruction.split(':')[1].split('|')[0];
+    console.log('Num Salle Consigne ============> ', instructionConsigne);
+    modificationConsigne();
+  }
 
   //! -------------------------------------------------
 });

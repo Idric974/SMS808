@@ -29,7 +29,9 @@ exports.postSms = (req, res) => {
     console.log('=====> [ INFO SMS ] Corps du message : ', result.data.message);
 
     if (result.data.response === 'Message Successfully Sent') {
-      res.status(200).json({ message: 'Message reçu' });
+      res.status(200).json({
+        message: 'Message reçu par le destinataire 😀.',
+      });
     } else {
       console.log('Problème :', result.data.response);
     }
