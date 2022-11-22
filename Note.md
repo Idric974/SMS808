@@ -72,3 +72,5 @@ Pour envoyer le message, appuier sur : CTRL Z
 npm i @serialport/bindings
 npm i node-pdu
 npm i serialport
+
+OK
