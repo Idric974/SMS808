@@ -106,7 +106,8 @@ gsmModem.on('onNewMessage', (data) => {
 
   let sendInstruction = () => {
     return new Promise((resolve, reject) => {
-      const url = `http://192.168.1.${numSalle}:3003/api/postSmsOrderRoute/postSmsOrder`;
+      const url = `http://192.168.1.${numSalle}:3003/api/postSmsOrderRoute/postSmsOrder`; //* Idric
+      //const url = `http://192.168.1.${numSalle}:3003/api/postSmsOrderRoute/postSmsOrder`; //*Antoine
 
       let message = `INSTRUCTION POUR LA SALLE : ${numSalle}`;
 
