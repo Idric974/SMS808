@@ -34,35 +34,15 @@ gsmModem.on('open', () => {
 
 let instruction;
 let instructionConsigne;
+let instructionStatut;
 
 gsmModem.on('onNewMessage', (data) => {
   //
 
   instruction = data['message'];
-  console.log('INSTRUCTION ====================> ', instruction);
+  console.log('INSTRUCTION BRUTE ==========> ', instruction);
 
-  //console.log('instruction ===> ', instruction.split(':')[1]);
-
-  // console.log(
-  //   '=====> [ INFO SMS RECU ] Numéro de téléphone : ',
-  //   data['sender']
-  // );
-
-  // console.log('=====> [ INFO SMS RECU ] Corps du message : ', data['message']);
-
-  // console.log('=====> [ INFO SMS RECU ] Index du message : ', data['index']);
-
-  // console.log(
-  //  '=====> [ INFO SMS RECU ] msgStatus du message : ',
-  //  data['msgStatus']
-  // );
-
-  // console.log(
-  //   '=====> [ INFO SMS RECU ] dateTimeSent du message : ',
-  //data['dateTimeSent']
-  //);
-
-  //! ⭐⭐⭐ RÉCUPÉRATION DES DATAS ⭐⭐⭐
+  //! ⭐⭐⭐ RÉCUPÉRATION ==> TEMPERATURE AIR | CONSIGNE AIR | DELTAT AIR ⭐⭐⭐
 
   //? Récupération du numéro de la salle.
 
@@ -71,35 +51,44 @@ gsmModem.on('onNewMessage', (data) => {
   let getNumSalle = () => {
     return new Promise((resolve, reject) => {
       //
-      if (instruction.split(':')[1] == 1) {
-        numSalle = 1;
-        console.log('numSalle :', numSalle);
-        resolve();
-        //
-      } else if (instruction.split(':')[1] == 2) {
-        numSalle = 2;
-        console.log('numSalle :', numSalle);
-        resolve();
-      } else if (instruction.split(':')[1] == 3) {
-        numSalle = 3;
-        console.log('numSalle :', numSalle);
-        resolve();
-      } else if (instruction.split(':')[1] == 4) {
-        numSalle = 4;
-        console.log('numSalle :', numSalle);
-        resolve();
-      } else if (instruction.split(':')[1] == 5) {
-        numSalle = 6;
-        console.log('numSalle :', numSalle);
-        resolve();
-      } else if (instruction.split(':')[1] == 6) {
-        numSalle = 6;
-        console.log('numSalle :', numSalle);
-        resolve();
-      } else {
-        console.log('ERREUR : getNumSalle');
-        reject();
+      switch (instructionStatut) {
+        case 1:
+          numSalle = 1;
+          console.log('numSalle ==========> :', numSalle);
+          resolve();
+          break;
+        case 2:
+          numSalle = 2;
+          console.log('numSalle ==========> :', numSalle);
+          resolve();
+          break;
+        case 3:
+          numSalle = 3;
+          console.log('numSalle ==========> :', numSalle);
+          resolve();
+          break;
+        case 4:
+          numSalle = 4;
+          console.log('numSalle ==========> :', numSalle);
+          resolve();
+          break;
+        case 5:
+          numSalle = 5;
+          console.log('numSalle ==========> :', numSalle);
+          resolve();
+          break;
+        case 6:
+          numSalle = 6;
+          console.log('numSalle ==========> :', numSalle);
+          resolve();
+          break;
+        default:
+          console.log(
+            `Pas de correspondance trouvée pour la valeur suivante : ${instructionStatut}.`
+          );
+          reject();
       }
+      //
     });
   };
 
@@ -112,17 +101,17 @@ gsmModem.on('onNewMessage', (data) => {
       const url = `http://192.168.1.${numSalle}:3003/api/postSmsOrderRoute/postSmsOrder`; //* Idric
       //const url = `http://192.168.1.${numSalle}:3003/api/postSmsOrderRoute/postSmsOrder`; //*Antoine
 
-      let message = `INSTRUCTION POUR LA SALLE : ${numSalle}`;
-
       axios
         .post(url, {
-          message,
+          numSalle,
         })
         .then(function (response) {
           console.log(`INSTRUCTION POUR LA SALLE : ${numSalle}`, response.data);
+          resolve();
         })
         .catch(function (error) {
-          console.log(error);
+          console.log('ERREUR AXIOS :', error);
+          reject();
         });
     });
   };
@@ -142,7 +131,7 @@ gsmModem.on('onNewMessage', (data) => {
 
   //! ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖
 
-  //! ⭐⭐⭐ MODIFICATION DE LA CONSIGNE ⭐⭐⭐.
+  //! ⭐⭐⭐ MODIFICATION ==> DE LA CONSIGNE AIR ⭐⭐⭐.
 
   //? Récupération du numéro de la salle.
 
@@ -150,34 +139,45 @@ gsmModem.on('onNewMessage', (data) => {
 
   let getNumSalleConsigne = () => {
     return new Promise((resolve, reject) => {
-      if (instructionConsigne == 1) {
-        numSalleConsigne = 1;
-        console.log('numSalle ====================> :', numSalleConsigne);
-        resolve();
-      } else if (instructionConsigne == 2) {
-        numSalleConsigne = 2;
-        console.log('numSalle ====================> :', numSalleConsigne);
-        resolve();
-      } else if (instructionConsigne == 3) {
-        numSalleConsigne = 3;
-        console.log('numSalle ====================> :', numSalleConsigne);
-        resolve();
-      } else if (instructionConsigne == 4) {
-        numSalleConsigne = 4;
-        console.log('numSalle ====================> :', numSalleConsigne);
-        resolve();
-      } else if (instructionConsigne == 5) {
-        numSalleConsigne = 6;
-        console.log('numSalle ====================> :', numSalleConsigne);
-        resolve();
-      } else if (instructionConsigne == 6) {
-        numSalleConsigne = 6;
-        console.log('numSalle ====================> :', numSalleConsigne);
-        resolve();
-      } else {
-        console.log('ERREUR : Get Num Salle');
-        reject();
+      //
+      switch (instructionConsigne) {
+        case 1:
+          numSalleConsigne = 1;
+          console.log('numSalleConsigne ==========> :', numSalleConsigne);
+          resolve();
+          break;
+        case 2:
+          numSalleConsigne = 2;
+          console.log('numSalleConsigne ==========> :', numSalleConsigne);
+          resolve();
+          break;
+        case 3:
+          numSalleConsigne = 3;
+          console.log('numSalleConsigne ==========> :', numSalleConsigne);
+          resolve();
+          break;
+        case 4:
+          numSalleConsigne = 4;
+          console.log('numSalleConsigne ==========> :', numSalleConsigne);
+          resolve();
+          break;
+        case 5:
+          numSalleConsigne = 5;
+          console.log('numSalleConsigne ==========> :', numSalleConsigne);
+          resolve();
+          break;
+        case 6:
+          numSalleConsigne = 6;
+          console.log('numSalleConsigne ==========> :', numSalleConsigne);
+          resolve();
+          break;
+        default:
+          console.log(
+            `Pas de correspondance trouvée pour la valeur suivante : ${instructionConsigne}.`
+          );
+          reject();
       }
+      //
     });
   };
 
@@ -247,11 +247,16 @@ gsmModem.on('onNewMessage', (data) => {
   //! Routage de la demande.
 
   if (instruction.split(':')[0] === 'Statut') {
+    //
+    instructionStatut = instruction.split(':')[1];
     console.log('instruction Statut ====================> ', instruction);
     recuperationDesDatas();
+    //
   } else if (instruction.split(':')[0] === 'Consigne') {
+    //
     instructionConsigne = instruction.split(':')[1].split('|')[0];
     console.log('Num Salle Consigne ============> ', instructionConsigne);
+    //
     modificationConsigne();
   }
 
