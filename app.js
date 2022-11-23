@@ -52,33 +52,33 @@ gsmModem.on('onNewMessage', (data) => {
     return new Promise((resolve, reject) => {
       //
       switch (instructionStatut) {
-        case 1:
-          numSalle = 1;
+        case '1':
+          numSalle = 11;
           console.log('numSalle ==========> :', numSalle);
           resolve();
           break;
-        case 2:
-          numSalle = 2;
+        case '2':
+          numSalle = 12;
           console.log('numSalle ==========> :', numSalle);
           resolve();
           break;
-        case 3:
-          numSalle = 3;
+        case '3':
+          numSalle = 13;
           console.log('numSalle ==========> :', numSalle);
           resolve();
           break;
-        case 4:
-          numSalle = 4;
+        case '4':
+          numSalle = 14;
           console.log('numSalle ==========> :', numSalle);
           resolve();
           break;
-        case 5:
-          numSalle = 5;
+        case '5':
+          numSalle = 15;
           console.log('numSalle ==========> :', numSalle);
           resolve();
           break;
-        case 6:
-          numSalle = 6;
+        case '6':
+          numSalle = 16;
           console.log('numSalle ==========> :', numSalle);
           resolve();
           break;
@@ -99,7 +99,7 @@ gsmModem.on('onNewMessage', (data) => {
   let sendInstruction = () => {
     return new Promise((resolve, reject) => {
       const url = `http://192.168.1.${numSalle}:3003/api/postSmsOrderRoute/postSmsOrder`; //* Idric
-      //const url = `http://192.168.1.${numSalle}:3003/api/postSmsOrderRoute/postSmsOrder`; //*Antoine
+      //const url = `http://192.168.0.${numSalle}:3003/api/postSmsOrderRoute/postSmsOrder`; //*Antoine
 
       axios
         .post(url, {
@@ -141,33 +141,33 @@ gsmModem.on('onNewMessage', (data) => {
     return new Promise((resolve, reject) => {
       //
       switch (instructionConsigne) {
-        case 1:
-          numSalleConsigne = 1;
+        case '1':
+          numSalleConsigne = 11;
           console.log('numSalleConsigne ==========> :', numSalleConsigne);
           resolve();
           break;
-        case 2:
-          numSalleConsigne = 2;
+        case '2':
+          numSalleConsigne = 12;
           console.log('numSalleConsigne ==========> :', numSalleConsigne);
           resolve();
           break;
-        case 3:
-          numSalleConsigne = 3;
+        case '3':
+          numSalleConsigne = 13;
           console.log('numSalleConsigne ==========> :', numSalleConsigne);
           resolve();
           break;
-        case 4:
-          numSalleConsigne = 4;
+        case '4':
+          numSalleConsigne = 14;
           console.log('numSalleConsigne ==========> :', numSalleConsigne);
           resolve();
           break;
-        case 5:
-          numSalleConsigne = 5;
+        case '5':
+          numSalleConsigne = 15;
           console.log('numSalleConsigne ==========> :', numSalleConsigne);
           resolve();
           break;
-        case 6:
-          numSalleConsigne = 6;
+        case '6':
+          numSalleConsigne = 16;
           console.log('numSalleConsigne ==========> :', numSalleConsigne);
           resolve();
           break;
@@ -208,7 +208,7 @@ gsmModem.on('onNewMessage', (data) => {
   let sendNewConsigne = () => {
     return new Promise((resolve, reject) => {
       const url = `http://192.168.1.${numSalleConsigne}:3003/api/postSmsOrderRoute/newConsigne`; //* Idric
-      //const url = `http://192.168.1.${numSalle}:3003/api/postSmsOrderRoute/postSmsOrder`; //*Antoine
+      //const url = `http://192.168.0.${numSalleConsigne}:3003/api/postSmsOrderRoute/postSmsOrder`; //*Antoine
 
       axios
         .post(url, {
@@ -249,13 +249,13 @@ gsmModem.on('onNewMessage', (data) => {
   if (instruction.split(':')[0] === 'Statut') {
     //
     instructionStatut = instruction.split(':')[1];
-    console.log('instruction Statut ====================> ', instruction);
+    console.log('instruction Statut =========> ', instructionStatut);
     recuperationDesDatas();
     //
   } else if (instruction.split(':')[0] === 'Consigne') {
     //
     instructionConsigne = instruction.split(':')[1].split('|')[0];
-    console.log('Num Salle Consigne ============> ', instructionConsigne);
+    console.log('Num Salle Consigne =========> ', instructionConsigne);
     //
     modificationConsigne();
   }

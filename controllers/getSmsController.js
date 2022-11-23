@@ -1,11 +1,9 @@
-let { gsmModem, serialportgsm } = require('../config/config')
+let { gsmModem, serialportgsm } = require('../config/config');
 
 exports.getSms = (req, res) => {
-
   //   serialportgsm.list((err, result) => {
   //    console.log('Les des ports disponibles ===> ', result);
   // });
-
 
   //! read the whole SIM card inbox
 
@@ -30,16 +28,8 @@ exports.getSms = (req, res) => {
 
       res.status(200).json(arr);
       res.end();
-
-
     }
   });
 
   //! -------------------------------------------------
-
-
-
-
 };
-
-
