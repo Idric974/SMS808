@@ -9,18 +9,18 @@ const { options, gsmModem } = require('./config/config');
 //? Procedure initialisation du modem.
 
 gsmModem.on('open', () => {
-  //
-  console.log(`=====> [ INFO SET MODEM ] Modem ouvert avec succès.`);
-  //
+
+  console.log(`Demarrage script initialisation du modem`);
+
   gsmModem.initializeModem((msg, err) => {
-    //
+
     if (err) {
-      //
+  
       console.log(`❌❌❌ Erreur d'initialisation du modem : ${err}`);
     } else {
-      //
+ 
       console.log(
-        `=====> [ INFO SET MODEM ] Initialisation du modem : ${JSON.stringify(
+        `👍 Initialisation du modem : ${JSON.stringify(
           msg.status
         )}`
       );
@@ -208,7 +208,7 @@ gsmModem.on('onNewMessage', (data) => {
   let sendNewConsigne = () => {
     return new Promise((resolve, reject) => {
       const url = `http://192.168.1.${numSalleConsigne}:3003/api/postSmsOrderRoute/newConsigne`; //* Idric
-      //const url = `http://192.168.0.${numSalleConsigne}:3003/api/postSmsOrderRoute/postSmsOrder`; //*Antoine
+      //const url = `http://192.168.0.${numSalleConsigne}:3003/api/postSmsOrderRoute/newConsigne`; //*Antoine
 
       axios
         .post(url, {
